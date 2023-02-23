@@ -1,83 +1,37 @@
 #include <stdio.h>
-#include "main.h"
-/**
- * main - prints the biggest prime factor of a number.
- *
- * Return: Always 0.
- */
-int main(void)
-{
-	long int number;
+#include <stdbool.h>
 
-	number = 612852475143;
-
-	if (isPrime(number) == 1)
-	{
-		printf("%ld\n", number);
-	}
-	else
-	{
-		printf("%ld\n", biggestFactor(number));
-	}
-	return (0);
+bool is_prime(long long n) {
+    if (n < 2) {
+        return false;
+    }
+    for (long long i = 2; i * i <= n; i++) {
+        if (n % i == 0) {
+            return false;
+        }
+    }
+    return true;
 }
-/**
- * isPrime - analise if a number is prime or not
- * @n: number to check
- * Return: true if it is prime false if not
- */
-int isPrime(long int n)
-{
-	int i;
 
-	if (n <= 1)
-	{
-		return (0);
-	}
-	else if (n == 2)
-	{
-		return (1);
-	}
-	else
-	{
-		for (i = 2; i < n; i++)
-		{
-			if (n % i == 0)
-			{
-				return (0);
-			}
-		}
-	return (1);
-	}
-}
-/**
- * biggestFactor - returns the biggest prime factor of a number
- * @a: number to check
- * Return: biggest factor
- */
-long int biggestFactor(long int a)
-{
-	long int i, factor;
+int main() {
+    long long n = 612852475143;
+    long long largest_prime_factor = 1;
 
-	factor = a;
-	for (i = 2; i <= factor; i++)
-	{
-		if (isPrime(factor) == 1)
-		{
-			break;
-		}
-		else
-		{
-			if ((factor % i == 0) && (isPrime(i) == 1))
-			{
-				factor = factor / i;
-				continue;
-			}
-			else
-			{
-				factor = factor;
-			}
-		}
-	}
-	return (factor);
+    // Try dividing n by all possible factors up to its square root
+    for (long long i = 2; i * i <= n; i++) {
+        if (n % i == 0) {
+            // Check if i is prime and greater than previous largest prime factor
+            if (is_prime(i) && i > largest_prime_factor) {
+                largest_prime_factor = i;
+            }
+
+            // Check if n/i is prime and greater than previous largest prime factor
+            if (is_prime(n/i) && (n/i) > largest_prime_factor) {
+                largest_prime_factor = n/i;
+            }
+        }
+    }
+
+    printf("%lld\n", largest_prime_factor);
+    return 0;
 }
